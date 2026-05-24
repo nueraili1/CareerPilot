@@ -1,0 +1,88 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  overflow: hidden;
+  color: #172033;
+  background: #eef2f8;
+  font-family: Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.el-icon,
+.el-icon svg {
+  width: 1em !important;
+  height: 1em !important;
+  max-width: 1em !important;
+  max-height: 1em !important;
+  line-height: 1;
+}
+
+.el-upload,
+.el-upload-dragger {
+  width: 100%;
+}
+
+.el-upload-dragger {
+  min-height: 150px !important;
+  padding: 26px 18px !important;
+  border: 1px dashed #cfd8e6 !important;
+  border-radius: 12px !important;
+  background: #fbfdff !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-textarea__inner {
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  box-shadow: 0 0 0 1px #dce4ef inset !important;
+}
+
+.el-button {
+  border-radius: 10px !important;
+}
+
+.el-tag {
+  border-radius: 9px !important;
+}
+
+.el-drawer {
+  background: #f7f9fc !important;
+}
+
+.el-drawer__header {
+  margin-bottom: 0 !important;
+  padding: 18px 20px !important;
+  border-bottom: 1px solid #e4eaf3;
+  color: #172033 !important;
+  font-weight: 800;
+}
+
+.el-drawer__body {
+  padding: 16px !important;
+}
+
+@media (max-width: 1180px) {
+  body {
+    overflow: auto;
+  }
+}
