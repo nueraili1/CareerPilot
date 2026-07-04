@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ConfigurationProperties(prefix = "app.cors")
 public class WebConfig implements WebMvcConfigurer {
 
-    private List<String> allowedOrigins = List.of("http://localhost:5173");
+    private List<String> allowedOrigins = List.of("http://localhost:5173", "http://127.0.0.1:5173");
 
     public List<String> getAllowedOrigins() {
         return allowedOrigins;
@@ -28,4 +28,3 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*");
     }
 }
-

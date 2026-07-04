@@ -48,6 +48,10 @@ export function analyzeResume(payload) {
   return client.post('/analysis', payload)
 }
 
+export function resolveJobTarget(payload) {
+  return client.post('/job-target/resolve', payload)
+}
+
 export function loadRecords() {
   return client.get('/analysis/records')
 }

@@ -25,6 +25,9 @@ public class ChatSession {
     @Column(columnDefinition = "TEXT")
     private String jobDescription;
 
+    @Column(columnDefinition = "TEXT")
+    private String targetContextJson;
+
     private LocalDateTime createdAt = LocalDateTime.now();
 
     private LocalDateTime updatedAt = LocalDateTime.now();
@@ -63,6 +66,14 @@ public class ChatSession {
 
     public void setJobDescription(String jobDescription) {
         this.jobDescription = jobDescription;
+    }
+
+    public String getTargetContextJson() {
+        return targetContextJson;
+    }
+
+    public void setTargetContextJson(String targetContextJson) {
+        this.targetContextJson = targetContextJson;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -9,6 +9,7 @@ public class ChatSessionDetailDto {
     private String title;
     private String resumeText;
     private String jobDescription;
+    private JobTargetContext targetContext;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<ChatHistoryMessageDto> messages;
@@ -18,6 +19,7 @@ public class ChatSessionDetailDto {
             String title,
             String resumeText,
             String jobDescription,
+            JobTargetContext targetContext,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
             List<ChatHistoryMessageDto> messages) {
@@ -25,6 +27,7 @@ public class ChatSessionDetailDto {
         this.title = title;
         this.resumeText = resumeText;
         this.jobDescription = jobDescription;
+        this.targetContext = targetContext;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.messages = messages;
@@ -44,6 +47,10 @@ public class ChatSessionDetailDto {
 
     public String getJobDescription() {
         return jobDescription;
+    }
+
+    public JobTargetContext getTargetContext() {
+        return targetContext;
     }
 
     public LocalDateTime getCreatedAt() {

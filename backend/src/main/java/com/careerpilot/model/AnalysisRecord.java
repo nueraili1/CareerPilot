@@ -30,6 +30,9 @@ public class AnalysisRecord {
     private String jobDescription;
 
     @Column(columnDefinition = "TEXT")
+    private String targetContextJson;
+
+    @Column(columnDefinition = "TEXT")
     private String resultJson;
 
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -84,6 +87,14 @@ public class AnalysisRecord {
 
     public void setJobDescription(String jobDescription) {
         this.jobDescription = jobDescription;
+    }
+
+    public String getTargetContextJson() {
+        return targetContextJson;
+    }
+
+    public void setTargetContextJson(String targetContextJson) {
+        this.targetContextJson = targetContextJson;
     }
 
     public String getResultJson() {

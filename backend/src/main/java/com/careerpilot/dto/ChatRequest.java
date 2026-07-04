@@ -9,8 +9,14 @@ public class ChatRequest {
 
     private String resumeText;
     private String jobDescription;
+
+    @Valid
     private AiRuntimeConfig aiConfig;
+
     private Long sessionId;
+
+    @Valid
+    private JobTargetContext targetContext;
 
     @Valid
     @NotEmpty(message = "对话消息不能为空")
@@ -46,6 +52,14 @@ public class ChatRequest {
 
     public void setSessionId(Long sessionId) {
         this.sessionId = sessionId;
+    }
+
+    public JobTargetContext getTargetContext() {
+        return targetContext;
+    }
+
+    public void setTargetContext(JobTargetContext targetContext) {
+        this.targetContext = targetContext;
     }
 
     public List<ChatMessage> getMessages() {

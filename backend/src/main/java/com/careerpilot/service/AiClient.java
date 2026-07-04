@@ -83,6 +83,27 @@ public class AiClient {
     }
 
     public String chat(String systemPrompt, String contextPrompt, List<ChatMessage> messages, AiRuntimeConfig runtimeConfig) {
+        List<Map<String, Object>> requestMessages = new ArrayList<>();
+        requestMessages.add(Map.of("role", "system", "content", systemPrompt));
+        if (StringUtils.hasText(contextPrompt)) {
+            requestMessages.add(Map.of("role", "user", "content", contextPrompt));
+        }
+        for (ChatMessage message : messages) {
+            requestMessages.add(Map.of(
+                    "role", normalizeRole(message.getRole()),
+                    "content", defaultValue(message.getContent())));
+        }
+        return sendMessages(requestMessages, runtimeConfig, contextPrompt == null ? 0 : contextPrompt.length());
+    }
+
+    public String chatWithUserContent(String systemPrompt, List<Map<String, Object>> userContent, AiRuntimeConfig runtimeConfig) {
+        List<Map<String, Object>> requestMessages = new ArrayList<>();
+        requestMessages.add(Map.of("role", "system", "content", systemPrompt));
+        requestMessages.add(Map.of("role", "user", "content", userContent));
+        return sendMessages(requestMessages, runtimeConfig, systemPrompt == null ? 0 : systemPrompt.length());
+    }
+
+    private String sendMessages(List<Map<String, Object>> requestMessages, AiRuntimeConfig runtimeConfig, int promptChars) {
         String apiKey = getApiKey(runtimeConfig);
         if (!StringUtils.hasText(apiKey)) {
             throw new IllegalStateException("AI_API_KEY is not configured");
@@ -92,15 +113,6 @@ public class AiClient {
         String model = getModel(runtimeConfig);
         String endpoint = baseUrl + "/chat/completions";
         long startedAt = System.currentTimeMillis();
-
-        List<Map<String, String>> requestMessages = new ArrayList<>();
-        requestMessages.add(Map.of("role", "system", "content", systemPrompt));
-        if (StringUtils.hasText(contextPrompt)) {
-            requestMessages.add(Map.of("role", "user", "content", contextPrompt));
-        }
-        for (ChatMessage message : messages) {
-            requestMessages.add(Map.of("role", normalizeRole(message.getRole()), "content", message.getContent()));
-        }
 
         Map<String, Object> payload = Map.of(
                 "model", model,
@@ -120,7 +132,7 @@ public class AiClient {
 
         String content = extractContent(responseBody);
         log.info("AI chat completed: model={}, promptChars={}, responseChars={}, costMs={}",
-                model, contextPrompt == null ? 0 : contextPrompt.length(), content.length(), System.currentTimeMillis() - startedAt);
+                model, promptChars, content.length(), System.currentTimeMillis() - startedAt);
         return content;
     }
 
@@ -141,7 +153,20 @@ public class AiClient {
     private String extractContent(String responseBody) {
         try {
             JsonNode root = objectMapper.readTree(responseBody);
-            return root.path("choices").path(0).path("message").path("content").asText();
+            JsonNode contentNode = root.path("choices").path(0).path("message").path("content");
+            if (contentNode.isTextual()) {
+                return contentNode.asText();
+            }
+            if (contentNode.isArray()) {
+                StringBuilder builder = new StringBuilder();
+                for (JsonNode item : contentNode) {
+                    if (item.path("type").asText().equals("text")) {
+                        builder.append(item.path("text").asText());
+                    }
+                }
+                return builder.toString();
+            }
+            return contentNode.asText();
         } catch (Exception exception) {
             throw new IllegalStateException("AI response parse failed", exception);
         }
@@ -164,5 +189,9 @@ public class AiClient {
             return "";
         }
         return value.endsWith("/") ? value.substring(0, value.length() - 1) : value;
+    }
+
+    private String defaultValue(String value) {
+        return value == null ? "" : value;
     }
 }
